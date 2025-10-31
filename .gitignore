@@ -1,0 +1,77 @@
+# === Python ===
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+.eggs/
+build/
+dist/
+pip-wheel-metadata/
+*.manifest
+*.spec
+
+# === Virtual Environments ===
+venv/
+.env/
+.env.bak/
+.venv/
+ENV/
+env/
+env.bak/
+*.venv
+
+# === Environment & API Keys ===
+# Hide secrets like API keys, tokens, etc.
+.env
+*.key
+*.pem
+*.p12
+
+# === Streamlit Cache ===
+.streamlit/
+logs/
+.cache/
+.secrets.toml
+
+# === FAISS Index / Vector Stores ===
+faiss_index/
+*.faiss
+
+# === Jupyter / IPython ===
+.ipynb_checkpoints/
+*.ipynb
+
+# === OS / Editor files ===
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# === PyCharm / VSCode settings ===
+*.iml
+*.code-workspace
+
+# === Test / Reports ===
+.coverage
+htmlcov/
+*.log
+pytest_cache/
+.tox/
+.mypy_cache/
+
+# === Temporary Files ===
+*.tmp
+*.bak
+*.old
+*.orig
+
+# === Project specific ===
+# Ignore uploaded PDFs or user data
+uploads/
+pdfs/
+data/
