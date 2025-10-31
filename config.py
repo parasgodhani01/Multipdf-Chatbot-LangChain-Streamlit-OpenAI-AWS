@@ -1,48 +1,60 @@
 from PyPDF2 import PdfReader
 from langchain_community.vectorstores import FAISS
-from langchain.prompts import PromptTemplate
-from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain.chains.question_answering import load_qa_chain
-from langchain_google_genai import GoogleGenerativeAIEmbeddings
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+from langchain_core.prompts import PromptTemplate
+from langchain_core.runnables import RunnableMap, RunnablePassthrough
 
 
-class process_pdf():
+class process_pdf:
 
+    @staticmethod
     def get_pdf_text(pdf_docs):
-        text=""
+        text = ""
         for pdf in pdf_docs:
-            pdf_reader= PdfReader(pdf)
+            pdf_reader = PdfReader(pdf)
             for page in pdf_reader.pages:
-                text+= page.extract_text()
-        return  text
+                text += page.extract_text() or ""
+        return text
 
+    @staticmethod
     def get_text_chunks(text):
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size=50000, chunk_overlap=1000)
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=3000, chunk_overlap=200)
         chunks = text_splitter.split_text(text)
         return chunks
-    
+
+    @staticmethod
     def get_vector_store(text_chunks):
-        embeddings = GoogleGenerativeAIEmbeddings(model = "models/embedding-001")
+        embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
         vector_store = FAISS.from_texts(text_chunks, embedding=embeddings)
         vector_store.save_local("faiss_index")
 
-
+    @staticmethod
     def get_conversational_chain():
-
+        # Define the prompt
         prompt_template = """
-        Answer the question as detailed as possible from the provided context, make sure to provide all the details, 
-        if the answer is not in provided context just say, "answer is not available in the context", 
-        don't provide the wrong answer\n\n
-        Context:\n {context}?\n
-        Question: \n{question}\n
+        You are a helpful assistant. Use the provided context to answer the question.
+        If the answer is not in the context, respond with "Answer not available in the provided context."
+
+        Context:
+        {context}
+
+        Question:
+        {question}
 
         Answer:
         """
 
-        model = ChatGoogleGenerativeAI(model="gemini-1.5-flash", temperature=0.2)
+        # LLM model
+        llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.2)
 
-        prompt = PromptTemplate(template = prompt_template, input_variables = ["context", "question"])
-        chain = load_qa_chain(model, chain_type="stuff", prompt=prompt)
+        # Create prompt object
+        prompt = PromptTemplate.from_template(prompt_template)
+
+        # Build the new Runnable pipeline
+        chain = RunnableMap({
+            "context": RunnablePassthrough(),
+            "question": RunnablePassthrough()
+        }) | prompt | llm
 
         return chain
