@@ -32,7 +32,7 @@ Install the dependencies:
 
 Here’s a preview of the application in action:
 
-![PDF Chat Bot Screenshot](chatbot_demo.png)
+![PDF Chat Bot Screenshot](demo.png)
 
 ---
 
