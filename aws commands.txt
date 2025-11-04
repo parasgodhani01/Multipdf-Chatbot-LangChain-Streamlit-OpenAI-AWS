@@ -1,0 +1,27 @@
+step-1 :
+
+connect to ec2 Instance
+
+-- use your own 
+ssh -i "pdf_chatbot.pem" ec2-user@ec2-54-86-138-20.compute-1.amazonaws.com
+
+step-2 :
+
+Create virtual env
+
+cmd : python3 -m venv myenv
+
+Activate virtual env
+
+cmd : source .venv/bin/activate
+
+step-3 :
+
+Copy files from local to ec2
+-- run command in local to copy file to ec2
+cmd: scp -i "pdf_chatbot.pem" requirements.txt ec2-user@ec2-54-86-138-20.compute-1.amazonaws.com:/home/ec2-user/
+
+step-4 :
+
+Run in background
+cmd :  streamlit run app.py &
