@@ -22,11 +22,6 @@ langchain-openai – Integration between LangChain and OpenAI APIs
 langchain-text-splitters – For dividing text into smaller overlapping chunks  
 faiss-cpu – For performing fast similarity searches using vector embeddings  
 PyPDF2 – For PDF reading and text extraction  
-
-## ▶️ Installation Steps  
-
-Install the dependencies:  
-   pip install -r requirements.txt  
  
 ## 🖼️ Screenshot  
 
